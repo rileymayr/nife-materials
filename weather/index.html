@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather — NIFE Study Materials</title>
+  <style>
+    :root {
+      --bg:           #06090f;
+      --surface:      #0b1020;
+      --surface-hi:   #101828;
+      --border:       #172035;
+      --border-hi:    #253550;
+      --amber:        #e89a10;
+      --amber-dim:    rgba(232, 154, 16, 0.12);
+      --amber-glow:   rgba(232, 154, 16, 0.25);
+      --text:         #b0c4dc;
+      --text-dim:     #3d5570;
+      --white:        #ddeeff;
+      --color:        #9b7cff;
+      --color-glow:   rgba(155, 124, 255, 0.2);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(23, 32, 53, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 32, 53, 0.5) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 22px 0;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+
+    .back-link:hover { color: var(--color); }
+    .back-link svg { width: 12px; height: 12px; }
+
+    .header-tag {
+      margin-left: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color);
+      opacity: 0.7;
+    }
+
+    .page-hero {
+      padding: 64px 0 48px;
+      animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .page-eyebrow {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--color);
+      margin-bottom: 16px;
+      opacity: 0.8;
+    }
+
+    .page-title {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 700;
+      letter-spacing: -2px;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .page-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 0 48px;
+    }
+
+    .content {
+      padding-bottom: 96px;
+    }
+
+    .placeholder {
+      border: 1px dashed var(--border-hi);
+      border-radius: 3px;
+      padding: 48px 32px;
+      text-align: center;
+      color: var(--text-dim);
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 520px) {
+      .footer-inner { flex-direction: column; gap: 10px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap">
+      <div class="header-inner">
+        <a class="back-link" href="/">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <path d="M10 6H2M5 3L2 6l3 3"/>
+          </svg>
+          Back
+        </a>
+        <span class="header-tag">Module 05 — Weather</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="page-hero">
+      <p class="page-eyebrow">Module 05</p>
+      <h1 class="page-title">Weather</h1>
+      <p class="page-desc">Meteorology, TAFs, METARs, cloud types, icing, turbulence, and weather-related hazards to flight.</p>
+    </section>
+    <div class="divider"></div>
+    <div class="content">
+      <div class="placeholder">Content coming soon</div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <span>NIFE Materials — NIFE 1</span>
+        <span>rileymayr</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
