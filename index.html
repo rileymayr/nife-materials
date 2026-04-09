@@ -398,27 +398,7 @@
 </head>
 <body>
 
-  <!-- ── HEADER ── -->
-  <header>
-    <div class="wrap">
-      <div class="header-inner">
-        <div class="logomark">
-          <!-- Compass/bearing icon -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="none" opacity="0.4"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="12" x2="14.5" y2="14.5"/>
-          </svg>
-        </div>
-        <span class="logo-text">NIFE Study Materials</span>
-        <div class="header-status">
-          <span class="status-pip"></span>
-          <span>Study Active</span>
-        </div>
-      </div>
-    </div>
-  </header>
+  <header></header>
 
   <!-- ── HERO ── -->
   <div class="wrap">
@@ -559,15 +539,10 @@
     </section>
   </div>
 
-  <!-- ── FOOTER ── -->
-  <footer>
-    <div class="wrap">
-      <div class="footer-inner">
-        <span>NIFE Materials — NIFE 1</span>
-        <span>rileymayr</span>
-      </div>
-    </div>
-  </footer>
+  <footer></footer>
+
+  <script src="/components.js"></script>
+  <script>initHeader({ type: 'main' }); initFooter();</script>
 
 </body>
 </html>
