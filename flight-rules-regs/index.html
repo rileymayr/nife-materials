@@ -133,6 +133,61 @@
       padding-bottom: 96px;
     }
 
+    .demo-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      margin-bottom: 20px;
+    }
+
+    .demo-card-inner {
+      border: 1px solid var(--border-hi);
+      border-radius: 8px;
+      padding: 22px 22px 20px;
+      background: linear-gradient(180deg, rgba(16, 24, 40, 0.96), rgba(11, 16, 32, 0.96));
+      transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s, background 0.18s;
+    }
+
+    .demo-card:hover .demo-card-inner {
+      transform: translateY(-3px);
+      border-color: var(--color);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      background: linear-gradient(180deg, rgba(16, 24, 40, 1), rgba(11, 16, 32, 1));
+    }
+
+    .demo-card-kicker {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color);
+      opacity: 0.8;
+      margin-bottom: 10px;
+    }
+
+    .demo-card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .demo-card-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-dim);
+      max-width: 620px;
+    }
+
+    .demo-card-cta {
+      margin-top: 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color);
+    }
+
     .placeholder {
       border: 1px dashed var(--border-hi);
       border-radius: 3px;
@@ -185,6 +240,17 @@
     </section>
     <div class="divider"></div>
     <div class="content">
+      <a class="demo-card" href="./glide-slope-practice.html">
+        <div class="demo-card-inner">
+          <div class="demo-card-kicker">Interactive</div>
+          <div class="demo-card-title">Glide Slope Practice</div>
+          <p class="demo-card-desc">
+            Practice reading PAPI and FACI approach lights. Drag the pitch stick to get back on glidepath — pull up when low, push down when high.
+          </p>
+          <div class="demo-card-cta">Launch →</div>
+        </div>
+      </a>
+
       <div class="placeholder">Content coming soon</div>
     </div>
   </div>
