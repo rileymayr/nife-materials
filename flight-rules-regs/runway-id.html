@@ -178,7 +178,7 @@
     }
 
     .question-text {
-      font-size: 15px;
+      font-size: 24px;
       line-height: 1.8;
       color: var(--text);
     }
@@ -589,7 +589,7 @@
       'dominant-baseline': 'middle',
       fill: '#e89a10',
       'font-family': "'Courier New', monospace",
-      'font-size': '13',
+      'font-size': '26',
       'font-weight': '700',
       'letter-spacing': '1'
     });
@@ -716,21 +716,30 @@
 
     var hdgStr = '<span class="q-val">' + pad3(hdg) + '&deg;</span>';
 
-    var part, indicatorName;
-    if (state.indicator === 'sock')       { part = 'mouth'; indicatorName = 'wind sock'; }
-    else if (state.indicator === 'tetra') { part = 'front'; indicatorName = 'tetrahedron'; }
-    else                                  { part = 'spur';  indicatorName = 'wind tee'; }
+    // Pick which end of the indicator to describe, then derive which direction it points.
+    // mouth/front/spur point INTO wind (windDir); tail/back point downwind (windDir+180).
+    var part, indicatorName, partDir;
+    if (state.indicator === 'sock') {
+      indicatorName = 'wind sock';
+      if (Math.random() < 0.5) { part = 'mouth'; partDir = windDir; }
+      else                     { part = 'tail';  partDir = (windDir + 180) % 360; }
+    } else if (state.indicator === 'tetra') {
+      indicatorName = 'tetrahedron';
+      part = 'spur'; partDir = windDir;
+    } else {
+      indicatorName = 'wind tee';
+      if (Math.random() < 0.5) { part = 'front'; partDir = windDir; }
+      else                     { part = 'back';  partDir = (windDir + 180) % 360; }
+    }
 
     var partStr = '<span class="q-val">' + part + '</span>';
     var indStr  = '<span class="q-val">' + indicatorName + '</span>';
 
-    // windDir is the direction the indicator's reference part points (into wind).
-    // "toward pilot" = direction facing the pilot = planeHdg + 180
     var towardPilot = (hdg + 180) % 360;
     var pointsStr;
-    if      (angDist(windDir, towardPilot) < 25) { pointsStr = '<span class="q-val">directly at you</span>'; }
-    else if (angDist(windDir, hdg)         < 25) { pointsStr = '<span class="q-val">directly away from you</span>'; }
-    else { pointsStr = 'at a heading of <span class="q-val">' + pad3(windDir) + '&deg;</span>'; }
+    if      (angDist(partDir, towardPilot) < 25) { pointsStr = '<span class="q-val">directly at you</span>'; }
+    else if (angDist(partDir, hdg)         < 25) { pointsStr = '<span class="q-val">directly away from you</span>'; }
+    else { pointsStr = 'at a heading of <span class="q-val">' + pad3(partDir) + '&deg;</span>'; }
 
     document.getElementById('questionPanel').innerHTML =
       'You are approaching an airport on a heading of ' + hdgStr + '. ' +
