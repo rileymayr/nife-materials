@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Runway Identification — NIFE Study Materials</title>
+  <style>
+    :root {
+      --bg:           #06090f;
+      --surface:      #0b1020;
+      --surface-hi:   #101828;
+      --border:       #172035;
+      --border-hi:    #253550;
+      --amber:        #e89a10;
+      --amber-dim:    rgba(232, 154, 16, 0.12);
+      --amber-glow:   rgba(232, 154, 16, 0.25);
+      --text:         #b0c4dc;
+      --text-dim:     #3d5570;
+      --white:        #ddeeff;
+      --color:        #e89a10;
+      --color-glow:   rgba(232, 154, 16, 0.2);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(23, 32, 53, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 32, 53, 0.5) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 22px 0;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+
+    .back-link:hover { color: var(--color); }
+    .back-link svg { width: 12px; height: 12px; }
+
+    .header-tag {
+      margin-left: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color);
+      opacity: 0.7;
+    }
+
+    .page-hero {
+      padding: 16px 0 10px;
+      animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .page-eyebrow {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--color);
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    .page-title {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -2px;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .page-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 0 14px;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* ---- Interactive ---- */
+
+    .interactive { padding-bottom: 40px; }
+
+    .sim-panel {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .question-panel {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      padding: 20px 22px 22px;
+    }
+
+    .question-kicker {
+      font-family: 'Courier New', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--color);
+      opacity: 0.7;
+      margin-bottom: 12px;
+    }
+
+    .question-text {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .q-val {
+      color: var(--color);
+      font-weight: 600;
+    }
+
+    .svg-panel {
+      flex-shrink: 0;
+      width: 320px;
+    }
+
+    #runwaySvg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @media (max-width: 680px) {
+      .sim-panel { flex-direction: column; }
+      .svg-panel { width: 100%; }
+      #runwaySvg { max-width: 360px; margin: 0 auto; }
+    }
+
+    /* ---- Runway buttons ---- */
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    .rwy-btn {
+      font-family: 'Courier New', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 12px 22px;
+      min-width: 68px;
+      border: 1px solid var(--border-hi);
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.12s, color 0.12s, background 0.12s;
+    }
+
+    .rwy-btn:hover:not(:disabled):not(.correct):not(.wrong) {
+      border-color: var(--color);
+      color: var(--color);
+    }
+
+    .rwy-btn:disabled { cursor: default; }
+
+    .rwy-btn.correct {
+      border-color: #28c97a;
+      background: rgba(40, 201, 122, 0.08);
+      color: #28c97a;
+    }
+
+    .rwy-btn.wrong {
+      border-color: #e03030;
+      background: rgba(224, 48, 48, 0.08);
+      color: #e03030;
+      animation: shake 0.35s;
+    }
+
+    /* ---- Streak ---- */
+
+    .streak-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .streak-label {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .streak-count {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color);
+      line-height: 1;
+      letter-spacing: -1px;
+      min-width: 2ch;
+    }
+
+    .streak-count.bump {
+      animation: bump 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .streak-pips {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .streak-pip {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border-hi);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .streak-pip.lit {
+      background: var(--color);
+      box-shadow: 0 0 6px var(--color-glow);
+    }
+
+    /* ---- Indicator row ---- */
+
+    .indicator-row {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 16px;
+    }
+
+    .indicator-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .indicator-label {
+      font-family: 'Courier New', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ---- Animations ---- */
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bump {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.28); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%       { transform: translateX(-6px); }
+      40%       { transform: translateX(6px); }
+      60%       { transform: translateX(-4px); }
+      80%       { transform: translateX(4px); }
+    }
+
+    @media (max-width: 520px) {
+      .footer-inner { flex-direction: column; gap: 10px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header></header>
+
+<div class="wrap">
+  <section class="page-hero">
+    <p class="page-eyebrow">Interactive</p>
+    <h1 class="page-title">Runway Identification</h1>
+    <p class="page-desc">Read the wind indicator and select the runway to land on. Always land into the wind.</p>
+  </section>
+  <div class="divider"></div>
+
+  <div class="interactive">
+    <div class="sim-wrap">
+      <svg id="runwaySvg" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="240" cy="240" r="216" fill="#08101e" stroke="#172035" stroke-width="1"/>
+        <g id="dynamicLayer"></g>
+      </svg>
+    </div>
+
+    <div class="indicator-row">
+      <div class="indicator-box">
+        <svg id="windSvg" viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="36" fill="#06090f" stroke="#172035" stroke-width="1"/>
+          <g id="windGroup"></g>
+        </svg>
+        <div class="indicator-label" id="indicatorLabel"></div>
+      </div>
+      <div class="indicator-box">
+        <svg id="planeSvg" viewBox="0 0 60 60" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+          <g id="planeGroup"></g>
+        </svg>
+        <div class="indicator-label">Aircraft</div>
+      </div>
+    </div>
+
+    <div class="btn-row" id="btnRow"></div>
+
+    <div class="streak-row">
+      <span class="streak-label">Streak</span>
+      <span class="streak-count" id="streakCount">0</span>
+      <div class="streak-pips" id="streakPips">
+        <div class="streak-pip"></div>
+        <div class="streak-pip"></div>
+        <div class="streak-pip"></div>
+        <div class="streak-pip"></div>
+        <div class="streak-pip"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer></footer>
+
+<script src="/components.js"></script>
+<script>
+  initHeader({ back: '/flight-rules-regs/', tag: 'Module 03 — Flight Rules &amp; Regs' });
+  initFooter();
+
+  // ---- Helpers ----
+
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    Object.keys(attrs).forEach(function(k) { el.setAttribute(k, attrs[k]); });
+    return el;
+  }
+
+  // Angular distance between two compass headings (0–180)
+  function angDist(a, b) {
+    return Math.abs(((a - b + 540) % 360) - 180);
+  }
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function runwayNums(angle) {
+    var n = Math.round(angle / 10);
+    if (n === 0) n = 36;
+    var numA = pad(n);
+    var opp  = n > 18 ? n - 18 : n + 18;
+    var numB = pad(opp);
+    return { numA: numA, numB: numB };
+  }
+
+  // ---- State ----
+
+  var state = {
+    runways:    [],
+    windDir:    0,
+    indicator:  'sock',
+    planeHdg:   0,
+    answer:     '',
+    selected:   null,
+    locked:     false,
+    streak:     0,
+    wrongTimer: null,
+  };
+
+  // ---- Scenario generation ----
+
+  function newScenario() {
+    clearTimeout(state.wrongTimer);
+    state.wrongTimer = null;
+    state.selected   = null;
+    state.locked     = false;
+
+    var count  = 1 + Math.floor(Math.random() * 4);
+    var angles = pickAngles(count);
+
+    state.runways = angles.map(function(a) {
+      var nums = runwayNums(a);
+      return { angle: a, numA: nums.numA, numB: nums.numB };
+    });
+
+    state.windDir   = pickWindDir(state.runways);
+    var types       = ['sock', 'tetra', 'tee'];
+    state.indicator = types[Math.floor(Math.random() * 3)];
+    state.planeHdg  = Math.floor(Math.random() * 360);
+    state.answer    = findAnswer(state.runways, state.windDir);
+
+    render();
+  }
+
+  function pickAngles(count) {
+    var base, o1, o2;
+    if (count === 1) {
+      return [Math.floor(Math.random() * 180)];
+    }
+    if (count === 2) {
+      base = Math.floor(Math.random() * 180);
+      var off = 40 + Math.floor(Math.random() * 40);
+      return [base, (base + off) % 180];
+    }
+    if (count === 3) {
+      base = Math.floor(Math.random() * 180);
+      o1   = 50 + Math.floor(Math.random() * 20);
+      o2   = o1 + 50 + Math.floor(Math.random() * 20);
+      return [base, (base + o1) % 180, (base + o2) % 180];
+    }
+    // 4 runways: 45° apart
+    base = Math.floor(Math.random() * 45);
+    return [base, base + 45, base + 90, base + 135];
+  }
+
+  function pickWindDir(runways) {
+    for (var t = 0; t < 200; t++) {
+      var w = Math.floor(Math.random() * 360);
+      if (isUnambiguous(w, runways)) return w;
+    }
+    return Math.floor(Math.random() * 360);
+  }
+
+  function isUnambiguous(windDir, runways) {
+    var dists = [];
+    runways.forEach(function(r) {
+      dists.push(angDist(r.angle, windDir));
+      dists.push(angDist((r.angle + 180) % 360, windDir));
+    });
+    dists.sort(function(a, b) { return a - b; });
+    return dists.length < 2 || (dists[1] - dists[0] >= 12);
+  }
+
+  function findAnswer(runways, windDir) {
+    var best = null, bestDist = Infinity;
+    runways.forEach(function(r) {
+      var ends = [
+        { hdg: r.angle,               num: r.numA },
+        { hdg: (r.angle + 180) % 360, num: r.numB }
+      ];
+      ends.forEach(function(e) {
+        var d = angDist(e.hdg, windDir);
+        if (d < bestDist) { bestDist = d; best = e.num; }
+      });
+    });
+    return best;
+  }
+
+  // ---- SVG rendering ----
+
+  var CX = 240, CY = 240;
+
+  function renderSVG() {
+    var layer = document.getElementById('dynamicLayer');
+    layer.innerHTML = '';
+
+    // Runways
+    state.runways.forEach(function(r) {
+      var g = svgEl('g', { transform: 'rotate(' + r.angle + ',' + CX + ',' + CY + ')' });
+
+      g.appendChild(svgEl('rect', {
+        x: CX - 9, y: CY - 220,
+        width: 18, height: 440,
+        fill: '#0c1928', stroke: '#253550', 'stroke-width': '1'
+      }));
+
+      // Centerline dashes
+      g.appendChild(svgEl('line', {
+        x1: CX, y1: CY - 212, x2: CX, y2: CY + 212,
+        stroke: '#172035', 'stroke-width': '1', 'stroke-dasharray': '10,10'
+      }));
+
+      // Threshold bars at each end
+      g.appendChild(svgEl('rect', { x: CX - 13, y: CY - 221, width: 26, height: 3, fill: '#253550' }));
+      g.appendChild(svgEl('rect', { x: CX - 13, y: CY + 218, width: 26, height: 3, fill: '#253550' }));
+
+      layer.appendChild(g);
+    });
+
+    // Runway number labels (drawn after runways so they sit on top)
+    state.runways.forEach(function(r) {
+      var ang = r.angle * Math.PI / 180;
+      // End A threshold: direction (angle+180) from center
+      var lax = CX - Math.sin(ang) * 235;
+      var lay = CY + Math.cos(ang) * 235;
+      // End B threshold: direction angle from center
+      var lbx = CX + Math.sin(ang) * 235;
+      var lby = CY - Math.cos(ang) * 235;
+
+      appendLabel(layer, r.numA, lax, lay, r.angle);
+      appendLabel(layer, r.numB, lbx, lby, (r.angle + 180) % 360);
+    });
+
+  }
+
+  function appendLabel(parent, num, x, y, heading) {
+    var g = svgEl('g', { transform: 'rotate(' + heading + ',' + x + ',' + y + ')' });
+    var t = svgEl('text', {
+      x: x, y: y,
+      'text-anchor': 'middle',
+      'dominant-baseline': 'middle',
+      fill: '#e89a10',
+      'font-family': "'Courier New', monospace",
+      'font-size': '13',
+      'font-weight': '700',
+      'letter-spacing': '1'
+    });
+    t.textContent = num;
+    g.appendChild(t);
+    parent.appendChild(g);
+  }
+
+  function renderIndicators() {
+    var names = { sock: 'Windsock', tetra: 'Tetrahedron', tee: 'Wind Tee' };
+
+    // Wind indicator — drawn in its own 80×80 SVG, centered at (40,40)
+    var wg = document.getElementById('windGroup');
+    wg.innerHTML = '';
+    var g = svgEl('g', { transform: 'translate(40,40) rotate(' + state.windDir + ')' });
+
+    if (state.indicator === 'sock') {
+      g.appendChild(svgEl('polygon', {
+        points: '-12,-19 12,-19 0,27',
+        fill: 'rgba(232,154,16,0.15)', stroke: '#e89a10',
+        'stroke-width': '1.5', 'stroke-linejoin': 'round'
+      }));
+      g.appendChild(svgEl('line', { x1: -11, y1: -14, x2: 11, y2: -14, stroke: '#e89a10', 'stroke-width': '1', opacity: '0.5' }));
+      g.appendChild(svgEl('line', { x1:  -8, y1:  -3, x2:  8, y2:  -3, stroke: '#e89a10', 'stroke-width': '1', opacity: '0.5' }));
+      g.appendChild(svgEl('line', { x1:  -5, y1:   9, x2:  5, y2:   9, stroke: '#e89a10', 'stroke-width': '1', opacity: '0.5' }));
+    } else if (state.indicator === 'tetra') {
+      g.appendChild(svgEl('polygon', { points: '0,-27 -14,15 14,15', fill: 'rgba(232,154,16,0.08)', stroke: 'none' }));
+      g.appendChild(svgEl('line', { x1: 0, y1: -27, x2: -14, y2: 15, stroke: '#e03030', 'stroke-width': '2', 'stroke-linecap': 'round' }));
+      g.appendChild(svgEl('line', { x1: 0, y1: -27, x2:  14, y2: 15, stroke: '#28c97a', 'stroke-width': '2', 'stroke-linecap': 'round' }));
+      g.appendChild(svgEl('line', { x1: -14, y1: 15, x2:  14, y2: 15, stroke: '#e89a10', 'stroke-width': '2.5', 'stroke-linecap': 'round' }));
+      g.appendChild(svgEl('line', { x1: 0, y1: -27, x2: 0, y2: -31,  stroke: '#28c97a', 'stroke-width': '2', 'stroke-linecap': 'round' }));
+    } else {
+      g.appendChild(svgEl('line', { x1: 0, y1: -28, x2: 0, y2: 18,   stroke: '#e89a10', 'stroke-width': '2.5', 'stroke-linecap': 'round' }));
+      g.appendChild(svgEl('line', { x1: -18, y1: -28, x2: 18, y2: -28, stroke: '#e89a10', 'stroke-width': '2.5', 'stroke-linecap': 'round' }));
+    }
+
+    wg.appendChild(g);
+    document.getElementById('indicatorLabel').textContent = names[state.indicator];
+
+    // Plane — drawn in its own 60×60 SVG, centered at (30,30)
+    var pg = document.getElementById('planeGroup');
+    pg.innerHTML = '';
+    var pg2 = svgEl('g', { transform: 'translate(30,30) rotate(' + state.planeHdg + ')' });
+    pg2.appendChild(svgEl('polygon', {
+      points: '0,-14 -7,9 0,5 7,9',
+      fill: 'rgba(61,85,112,0.6)', stroke: '#3d5570',
+      'stroke-width': '1', 'stroke-linejoin': 'round'
+    }));
+    pg.appendChild(pg2);
+  }
+
+  // ---- Buttons ----
+
+  function renderButtons() {
+    var container = document.getElementById('btnRow');
+    container.innerHTML = '';
+
+    var allNums = [];
+    state.runways.forEach(function(r) { allNums.push(r.numA, r.numB); });
+
+    allNums.forEach(function(num) {
+      var btn = document.createElement('button');
+      btn.className    = 'rwy-btn';
+      btn.textContent  = num;
+      btn.disabled     = state.locked;
+
+      if (state.selected !== null) {
+        if (num === state.answer && state.selected === state.answer) {
+          btn.classList.add('correct');
+        } else if (num === state.selected) {
+          btn.classList.add('wrong');
+        }
+      }
+
+      btn.addEventListener('click', function() { onSelect(num); });
+      container.appendChild(btn);
+    });
+  }
+
+  function onSelect(num) {
+    if (state.locked) return;
+    clearTimeout(state.wrongTimer);
+    state.wrongTimer = null;
+    state.selected   = num;
+
+    if (num === state.answer) {
+      state.locked  = true;
+      state.streak += 1;
+      renderButtons();
+      renderStreakPips();
+
+      var sc = document.getElementById('streakCount');
+      sc.classList.remove('bump');
+      void sc.offsetWidth;
+      sc.classList.add('bump');
+
+      setTimeout(newScenario, 900);
+    } else {
+      state.streak = 0;
+      renderButtons();
+      renderStreakPips();
+
+      state.wrongTimer = setTimeout(function() {
+        state.selected = null;
+        renderButtons();
+      }, 600);
+    }
+  }
+
+  // ---- Streak pips ----
+
+  function renderStreakPips() {
+    var pips = document.querySelectorAll('.streak-pip');
+    var lit  = (state.streak % 5 === 0 && state.streak > 0) ? 5 : state.streak % 5;
+    pips.forEach(function(pip, i) { pip.classList.toggle('lit', i < lit); });
+    document.getElementById('streakCount').textContent = state.streak;
+  }
+
+  // ---- Render ----
+
+  function render() {
+    renderSVG();
+    renderIndicators();
+    renderButtons();
+    renderStreakPips();
+  }
+
+  // ---- Init ----
+
+  newScenario();
+</script>
+</body>
+</html>
