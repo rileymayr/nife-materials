@@ -93,7 +93,7 @@
     }
 
     .page-hero {
-      padding: 64px 0 48px;
+      padding: 16px 0 10px;
       animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
@@ -103,30 +103,30 @@
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--color);
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       opacity: 0.8;
     }
 
     .page-title {
-      font-size: clamp(36px, 6vw, 64px);
+      font-size: clamp(24px, 4vw, 40px);
       font-weight: 700;
       letter-spacing: -2px;
       color: var(--white);
       line-height: 1;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     .page-desc {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-dim);
       max-width: 520px;
-      line-height: 1.7;
+      line-height: 1.6;
     }
 
     .divider {
       height: 1px;
       background: var(--border);
-      margin: 0 0 48px;
+      margin: 0 0 14px;
     }
 
     footer {
@@ -152,7 +152,7 @@
     .mode-tabs {
       display: flex;
       gap: 8px;
-      margin-bottom: 40px;
+      margin-bottom: 14px;
     }
 
     .mode-tab {
@@ -179,11 +179,11 @@
 
     /* ---- Sim area ---- */
 
-    .interactive { padding-bottom: 96px; }
+    .interactive { padding-bottom: 20px; }
 
     .sim-area {
       display: grid;
-      grid-template-columns: 1fr 100px;
+      grid-template-columns: 1fr 160px;
       gap: 56px;
       align-items: center;
     }
@@ -194,7 +194,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 32px;
+      gap: 20px;
     }
 
     /* PAPI */
@@ -202,10 +202,10 @@
     .papi-housing {
       background: var(--surface);
       border: 1px solid var(--border-hi);
-      border-radius: 12px;
-      padding: 32px 44px;
+      border-radius: 14px;
+      padding: 28px 40px;
       display: flex;
-      gap: 22px;
+      gap: 28px;
       align-items: center;
       transition: border-color 0.4s, box-shadow 0.4s;
     }
@@ -216,8 +216,8 @@
     }
 
     .papi-light {
-      width: 72px;
-      height: 72px;
+      width: 104px;
+      height: 104px;
       border-radius: 50%;
       background: #120808;
       transition: background 0.22s, box-shadow 0.22s;
@@ -225,12 +225,12 @@
 
     .papi-light.red {
       background: #e03030;
-      box-shadow: 0 0 18px #e03030, 0 0 48px rgba(224, 48, 48, 0.45);
+      box-shadow: 0 0 26px #e03030, 0 0 70px rgba(224, 48, 48, 0.45);
     }
 
     .papi-light.white {
       background: #ddeeff;
-      box-shadow: 0 0 18px rgba(221, 238, 255, 0.95), 0 0 48px rgba(221, 238, 255, 0.4);
+      box-shadow: 0 0 26px rgba(221, 238, 255, 0.95), 0 0 70px rgba(221, 238, 255, 0.4);
     }
 
     /* VASI */
@@ -238,11 +238,11 @@
     .vasi-housing {
       background: var(--surface);
       border: 1px solid var(--border-hi);
-      border-radius: 12px;
-      padding: 28px 44px;
+      border-radius: 14px;
+      padding: 28px 40px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
       align-items: center;
       transition: border-color 0.4s, box-shadow 0.4s;
     }
@@ -256,21 +256,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
     }
 
     .vasi-bar-label {
       font-family: 'Courier New', monospace;
-      font-size: 9px;
+      font-size: 13px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--text-dim);
     }
 
     .vasi-bar {
-      width: 120px;
-      height: 52px;
-      border-radius: 8px;
+      width: 170px;
+      height: 76px;
+      border-radius: 10px;
       background: #120808;
       border: 1px solid var(--border);
       transition: background 0.22s, box-shadow 0.22s;
@@ -278,12 +278,12 @@
 
     .vasi-bar.red {
       background: #e03030;
-      box-shadow: 0 0 16px #e03030, 0 0 44px rgba(224, 48, 48, 0.45);
+      box-shadow: 0 0 22px #e03030, 0 0 64px rgba(224, 48, 48, 0.45);
     }
 
     .vasi-bar.white {
       background: #ddeeff;
-      box-shadow: 0 0 16px rgba(221, 238, 255, 0.95), 0 0 44px rgba(221, 238, 255, 0.4);
+      box-shadow: 0 0 22px rgba(221, 238, 255, 0.95), 0 0 64px rgba(221, 238, 255, 0.4);
     }
 
     /* Status */
@@ -325,7 +325,7 @@
 
     .stick-dir {
       font-family: 'Courier New', monospace;
-      font-size: 9px;
+      font-size: 13px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--text-dim);
@@ -334,21 +334,21 @@
     }
 
     .stick-track {
-      width: 48px;
-      height: 220px;
+      width: 140px;
+      height: 480px;
       background: var(--surface);
       border: 1px solid var(--border-hi);
-      border-radius: 24px;
+      border-radius: 70px;
       position: relative;
       touch-action: none;
     }
 
     .stick-thumb {
-      width: 40px;
-      height: 40px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       background: radial-gradient(circle at 38% 35%, #f8c040, #c87010);
-      box-shadow: 0 0 14px rgba(232, 154, 16, 0.7), 0 0 28px rgba(232, 154, 16, 0.3);
+      box-shadow: 0 0 40px rgba(232, 154, 16, 0.7), 0 0 80px rgba(232, 154, 16, 0.3);
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
@@ -361,7 +361,7 @@
 
     .stick-thumb.solved {
       background: radial-gradient(circle at 38% 35%, #5ce89a, #1fa05a);
-      box-shadow: 0 0 14px rgba(40, 201, 122, 0.8), 0 0 28px rgba(40, 201, 122, 0.3);
+      box-shadow: 0 0 40px rgba(40, 201, 122, 0.8), 0 0 80px rgba(40, 201, 122, 0.3);
     }
 
     /* ---- Streak ---- */
@@ -370,8 +370,8 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-top: 48px;
-      padding-top: 32px;
+      margin-top: 14px;
+      padding-top: 12px;
       border-top: 1px solid var(--border);
     }
 
@@ -564,6 +564,7 @@
     stickOffset: 0,   // user's stick position relative to center (-2..+2)
     dragging:    false,
     solved:      false,
+    interacted:  false, // true once user touches stick on current rep
     holdTimer:   null,
     streak:      0,
   };
@@ -589,8 +590,8 @@
 
   // ---- Stick geometry ----
 
-  var TRACK_H  = 220;           // matches CSS .stick-track height
-  var THUMB_D  = 40;            // thumb diameter — matches CSS
+  var TRACK_H  = 480;           // matches CSS .stick-track height
+  var THUMB_D  = 120;           // thumb diameter — matches CSS
   var USABLE_H = TRACK_H - THUMB_D;  // 180px of usable travel
 
   // stickOffset (+2 … -2) → thumb top in px
@@ -628,10 +629,10 @@
     vasiNear.className = 'vasi-bar ' + vasiPat[1];
     vasiHousing.classList.toggle('solved', solved);
 
-    // Status text
-    statusMain.textContent   = info.main;
+    // Status text — hidden until user interacts with the stick
+    statusMain.textContent   = state.interacted ? info.main   : '';
     statusMain.style.color   = info.mainColor;
-    statusAction.textContent = info.action;
+    statusAction.textContent = state.interacted ? info.action : '';
     statusAction.style.color = info.actionColor;
 
     // Stick thumb: position reflects stickOffset, not absolute deviation
@@ -651,6 +652,7 @@
     state.scenarioDev = pool[Math.floor(Math.random() * pool.length)];
     state.stickOffset = 0;  // always reset stick to center
     state.solved      = false;
+    state.interacted  = false;
     clearTimeout(state.holdTimer);
     state.holdTimer   = null;
     render();
@@ -686,7 +688,8 @@
   stickThumb.addEventListener('pointerdown', function(e) {
     if (state.solved) return;
     e.preventDefault();
-    state.dragging = true;
+    state.dragging    = true;
+    state.interacted  = true;
     dragStartY     = e.clientY;
     dragStartTop   = devToTop(state.stickOffset);  // start from current offset position
     stickThumb.style.transition = 'background 0.25s, box-shadow 0.25s';
