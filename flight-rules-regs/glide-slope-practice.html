@@ -233,64 +233,57 @@
       box-shadow: 0 0 18px rgba(221, 238, 255, 0.95), 0 0 48px rgba(221, 238, 255, 0.4);
     }
 
-    /* FACI */
+    /* VASI */
 
-    .faci-housing {
+    .vasi-housing {
       background: var(--surface);
       border: 1px solid var(--border-hi);
       border-radius: 12px;
-      width: 160px;
-      height: 260px;
-      position: relative;
-      overflow: hidden;
+      padding: 28px 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: center;
       transition: border-color 0.4s, box-shadow 0.4s;
     }
 
-    .faci-housing.solved {
+    .vasi-housing.solved {
       border-color: #28c97a;
       box-shadow: 0 0 40px rgba(40, 201, 122, 0.2);
     }
 
-    .faci-wavebox {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 10px;
-      opacity: 0;
-      transition: opacity 0.2s;
+    .vasi-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
     }
 
-    .faci-wavebox.left  { left: 0;  background: #e03030; }
-    .faci-wavebox.right { right: 0; background: #e03030; }
-
-    .faci-wavebox.active {
-      opacity: 1;
-      box-shadow: 0 0 16px #e03030;
+    .vasi-bar-label {
+      font-family: 'Courier New', monospace;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
     }
 
-    .faci-datum {
-      position: absolute;
-      left: 14px;
-      right: 14px;
-      height: 3px;
-      background: #28c97a;
-      box-shadow: 0 0 8px #28c97a, 0 0 20px rgba(40, 201, 122, 0.5);
+    .vasi-bar {
+      width: 120px;
+      height: 52px;
+      border-radius: 8px;
+      background: #120808;
+      border: 1px solid var(--border);
+      transition: background 0.22s, box-shadow 0.22s;
     }
 
-    .faci-datum.top    { top: 40%; }
-    .faci-datum.bottom { top: 60%; }
+    .vasi-bar.red {
+      background: #e03030;
+      box-shadow: 0 0 16px #e03030, 0 0 44px rgba(224, 48, 48, 0.45);
+    }
 
-    .faci-meatball {
-      position: absolute;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 38% 35%, #f8c040, #c87010);
-      box-shadow: 0 0 16px rgba(232, 154, 16, 0.9), 0 0 40px rgba(232, 154, 16, 0.4);
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      top: 50%;
-      transition: top 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    .vasi-bar.white {
+      background: #ddeeff;
+      box-shadow: 0 0 16px rgba(221, 238, 255, 0.95), 0 0 44px rgba(221, 238, 255, 0.4);
     }
 
     /* Status */
@@ -465,7 +458,7 @@
 
     <div class="mode-tabs">
       <button class="mode-tab active" data-mode="papi">PAPI</button>
-      <button class="mode-tab" data-mode="faci">FACI</button>
+      <button class="mode-tab" data-mode="vasi">VASI</button>
     </div>
 
     <div class="sim-area">
@@ -480,13 +473,16 @@
           <div class="papi-light" id="pl3"></div>
         </div>
 
-        <!-- FACI -->
-        <div class="faci-housing hidden" id="faciHousing">
-          <div class="faci-wavebox left"  id="waveL"></div>
-          <div class="faci-wavebox right" id="waveR"></div>
-          <div class="faci-datum top"></div>
-          <div class="faci-datum bottom"></div>
-          <div class="faci-meatball" id="meatball"></div>
+        <!-- VASI -->
+        <div class="vasi-housing hidden" id="vasiHousing">
+          <div class="vasi-bar-wrap">
+            <div class="vasi-bar-label">Far</div>
+            <div class="vasi-bar" id="vasiFar"></div>
+          </div>
+          <div class="vasi-bar-wrap">
+            <div class="vasi-bar-label">Near</div>
+            <div class="vasi-bar" id="vasiNear"></div>
+          </div>
         </div>
 
         <!-- Status -->
@@ -541,9 +537,15 @@
      '2': [false, false, false, false],
   };
 
-  // Meatball top as % of FACI housing height.
-  // Datum bars at 40% and 60%. Ball at 50% = on glidepath.
-  var MEATBALL_TOP = { '-2': 83, '-1': 66, '0': 50, '1': 34, '2': 17 };
+  // VASI: [far bar, near bar]. 'red' = below that bar's sector, 'white' = above.
+  // red/red = low, red/white = on glidepath, white/white = high.
+  var VASI_PATTERN = {
+    '-2': ['red',   'red'  ],
+    '-1': ['red',   'red'  ],
+     '0': ['red',   'white'],
+     '1': ['white', 'white'],
+     '2': ['white', 'white'],
+  };
 
   // Status display info per deviation
   var STATUS = {
@@ -557,22 +559,27 @@
   // ---- State ----
 
   var state = {
-    mode:      'papi',
-    deviation: 1,
-    dragging:  false,
-    solved:    false,
-    holdTimer: null,
-    streak:    0,
+    mode:        'papi',
+    scenarioDev: -1,  // deviation shown at the start of each rep
+    stickOffset: 0,   // user's stick position relative to center (-2..+2)
+    dragging:    false,
+    solved:      false,
+    holdTimer:   null,
+    streak:      0,
   };
+
+  // Deviation currently shown in the lights
+  function currentDev() {
+    return Math.max(-2, Math.min(2, state.scenarioDev + state.stickOffset));
+  }
 
   // ---- Elements ----
 
   var papiHousing  = document.getElementById('papiHousing');
-  var faciHousing  = document.getElementById('faciHousing');
+  var vasiHousing  = document.getElementById('vasiHousing');
   var papiLights   = [0,1,2,3].map(function(i){ return document.getElementById('pl'+i); });
-  var meatball     = document.getElementById('meatball');
-  var waveL        = document.getElementById('waveL');
-  var waveR        = document.getElementById('waveR');
+  var vasiFar      = document.getElementById('vasiFar');
+  var vasiNear     = document.getElementById('vasiNear');
   var statusMain   = document.getElementById('statusMain');
   var statusAction = document.getElementById('statusAction');
   var stickTrack   = document.getElementById('stickTrack');
@@ -601,7 +608,7 @@
   // ---- Render ----
 
   function render() {
-    var dev    = state.deviation;
+    var dev    = currentDev();
     var key    = String(dev);
     var info   = STATUS[key];
     var solved = dev === 0;
@@ -614,11 +621,11 @@
     });
     papiHousing.classList.toggle('solved', solved);
 
-    // FACI meatball + wave-off lights
-    meatball.style.top = MEATBALL_TOP[key] + '%';
-    faciHousing.classList.toggle('solved', solved);
-    waveL.classList.toggle('active', dev === -2);
-    waveR.classList.toggle('active', dev === -2);
+    // VASI bars
+    var vasiPat = VASI_PATTERN[key];
+    vasiFar.className  = 'vasi-bar ' + vasiPat[0];
+    vasiNear.className = 'vasi-bar ' + vasiPat[1];
+    vasiHousing.classList.toggle('solved', solved);
 
     // Status text
     statusMain.textContent   = info.main;
@@ -626,8 +633,8 @@
     statusAction.textContent = info.action;
     statusAction.style.color = info.actionColor;
 
-    // Stick thumb position
-    stickThumb.style.top = devToTop(dev) + 'px';
+    // Stick thumb: position reflects stickOffset, not absolute deviation
+    stickThumb.style.top = devToTop(state.stickOffset) + 'px';
     stickThumb.classList.toggle('solved', solved);
 
     // Streak pips (cycle every 5)
@@ -639,21 +646,22 @@
   // ---- New scenario ----
 
   function newScenario() {
-    var pool    = [-2, -1, 1, 2].filter(function(d){ return d !== state.deviation; });
-    state.deviation = pool[Math.floor(Math.random() * pool.length)];
-    state.solved    = false;
+    var pool        = [-2, -1, 1, 2].filter(function(d){ return d !== state.scenarioDev; });
+    state.scenarioDev = pool[Math.floor(Math.random() * pool.length)];
+    state.stickOffset = 0;  // always reset stick to center
+    state.solved      = false;
     clearTimeout(state.holdTimer);
-    state.holdTimer = null;
+    state.holdTimer   = null;
     render();
   }
 
   // ---- Success / hold logic ----
 
   function checkSolved() {
-    if (state.deviation === 0 && !state.solved) {
+    if (currentDev() === 0 && !state.solved) {
       if (state.holdTimer) return;
       state.holdTimer = setTimeout(function() {
-        if (state.deviation !== 0 || state.solved) return;
+        if (currentDev() !== 0 || state.solved) return;
         state.solved = true;
         state.streak += 1;
         render();
@@ -663,7 +671,7 @@
         streakCount.classList.add('bump');
         setTimeout(newScenario, 900);
       }, 600);
-    } else if (state.deviation !== 0 && state.holdTimer) {
+    } else if (currentDev() !== 0 && state.holdTimer) {
       clearTimeout(state.holdTimer);
       state.holdTimer = null;
     }
@@ -679,22 +687,23 @@
     e.preventDefault();
     state.dragging = true;
     dragStartY     = e.clientY;
-    dragStartTop   = devToTop(state.deviation);
+    dragStartTop   = devToTop(state.stickOffset);  // start from current offset position
     stickThumb.style.transition = 'background 0.25s, box-shadow 0.25s';
     stickThumb.setPointerCapture(e.pointerId);
   });
 
   stickThumb.addEventListener('pointermove', function(e) {
     if (!state.dragging) return;
-    var rawTop  = dragStartTop + (e.clientY - dragStartY);
-    var clamped = Math.max(0, Math.min(USABLE_H, rawTop));
-    var newDev  = topToDev(clamped);
+    var rawTop     = dragStartTop + (e.clientY - dragStartY);
+    var clamped    = Math.max(0, Math.min(USABLE_H, rawTop));
+    var newOffset  = topToDev(clamped);
+    var dev        = Math.max(-2, Math.min(2, state.scenarioDev + newOffset));
 
     stickThumb.style.top = clamped + 'px';
-    stickThumb.classList.toggle('solved', newDev === 0);
+    stickThumb.classList.toggle('solved', dev === 0);
 
-    if (newDev !== state.deviation) {
-      state.deviation = newDev;
+    if (newOffset !== state.stickOffset) {
+      state.stickOffset = newOffset;
       renderLightsOnly();
       checkSolved();
     }
@@ -704,7 +713,7 @@
     if (!state.dragging) return;
     state.dragging = false;
     stickThumb.style.transition = '';
-    stickThumb.style.top = devToTop(state.deviation) + 'px';
+    stickThumb.style.top = devToTop(state.stickOffset) + 'px';
   });
 
   stickThumb.addEventListener('pointercancel', function() {
@@ -714,7 +723,7 @@
 
   // Lights-only render used during drag (avoids repositioning thumb mid-drag)
   function renderLightsOnly() {
-    var dev  = state.deviation;
+    var dev  = currentDev();
     var key  = String(dev);
     var info = STATUS[key];
 
@@ -725,10 +734,10 @@
     });
     papiHousing.classList.toggle('solved', dev === 0);
 
-    meatball.style.top = MEATBALL_TOP[key] + '%';
-    faciHousing.classList.toggle('solved', dev === 0);
-    waveL.classList.toggle('active', dev === -2);
-    waveR.classList.toggle('active', dev === -2);
+    var vasiPat = VASI_PATTERN[key];
+    vasiFar.className  = 'vasi-bar ' + vasiPat[0];
+    vasiNear.className = 'vasi-bar ' + vasiPat[1];
+    vasiHousing.classList.toggle('solved', dev === 0);
 
     statusMain.textContent   = info.main;
     statusMain.style.color   = info.mainColor;
@@ -749,7 +758,7 @@
       state.holdTimer = null;
 
       papiHousing.classList.toggle('hidden', state.mode !== 'papi');
-      faciHousing.classList.toggle('hidden', state.mode !== 'faci');
+      vasiHousing.classList.toggle('hidden', state.mode !== 'vasi');
 
       newScenario();
     });
