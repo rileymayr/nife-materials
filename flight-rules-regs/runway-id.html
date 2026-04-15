@@ -364,26 +364,32 @@
   <div class="divider"></div>
 
   <div class="interactive">
-    <div class="sim-wrap">
-      <svg id="runwaySvg" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="240" cy="240" r="216" fill="#08101e" stroke="#172035" stroke-width="1"/>
-        <g id="dynamicLayer"></g>
-      </svg>
-    </div>
-
-    <div class="indicator-row">
-      <div class="indicator-box">
-        <svg id="windSvg" viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="40" cy="40" r="36" fill="#06090f" stroke="#172035" stroke-width="1"/>
-          <g id="windGroup"></g>
-        </svg>
-        <div class="indicator-label" id="indicatorLabel"></div>
+    <div class="sim-panel">
+      <div class="question-panel">
+        <div class="question-kicker">Scenario</div>
+        <div class="question-text" id="questionPanel"></div>
       </div>
-      <div class="indicator-box">
-        <svg id="planeSvg" viewBox="0 0 60 60" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
-          <g id="planeGroup"></g>
+      <div class="svg-panel">
+        <svg id="runwaySvg" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="240" cy="240" r="216" fill="#08101e" stroke="#172035" stroke-width="1"/>
+          <g id="dynamicLayer"></g>
         </svg>
-        <div class="indicator-label">Aircraft</div>
+
+        <div class="indicator-row">
+          <div class="indicator-box">
+            <svg id="windSvg" viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="36" fill="#06090f" stroke="#172035" stroke-width="1"/>
+              <g id="windGroup"></g>
+            </svg>
+            <div class="indicator-label" id="indicatorLabel"></div>
+          </div>
+          <div class="indicator-box">
+            <svg id="planeSvg" viewBox="0 0 60 60" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+              <g id="planeGroup"></g>
+            </svg>
+            <div class="indicator-label">Aircraft</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -423,7 +429,8 @@
     return Math.abs(((a - b + 540) % 360) - 180);
   }
 
-  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function pad(n)  { return n < 10 ? '0' + n : '' + n; }
+  function pad3(n) { return n < 10 ? '00' + n : n < 100 ? '0' + n : '' + n; }
 
   function runwayNums(angle) {
     var n = Math.round(angle / 10);
@@ -701,11 +708,42 @@
     document.getElementById('streakCount').textContent = state.streak;
   }
 
+  // ---- Question text ----
+
+  function renderQuestion() {
+    var hdg     = state.planeHdg;
+    var windDir = state.windDir;
+
+    var hdgStr = '<span class="q-val">' + pad3(hdg) + '&deg;</span>';
+
+    var part, indicatorName;
+    if (state.indicator === 'sock')       { part = 'mouth'; indicatorName = 'wind sock'; }
+    else if (state.indicator === 'tetra') { part = 'front'; indicatorName = 'tetrahedron'; }
+    else                                  { part = 'spur';  indicatorName = 'wind tee'; }
+
+    var partStr = '<span class="q-val">' + part + '</span>';
+    var indStr  = '<span class="q-val">' + indicatorName + '</span>';
+
+    // windDir is the direction the indicator's reference part points (into wind).
+    // "toward pilot" = direction facing the pilot = planeHdg + 180
+    var towardPilot = (hdg + 180) % 360;
+    var pointsStr;
+    if      (angDist(windDir, towardPilot) < 25) { pointsStr = '<span class="q-val">directly at you</span>'; }
+    else if (angDist(windDir, hdg)         < 25) { pointsStr = '<span class="q-val">directly away from you</span>'; }
+    else { pointsStr = 'at a heading of <span class="q-val">' + pad3(windDir) + '&deg;</span>'; }
+
+    document.getElementById('questionPanel').innerHTML =
+      'You are approaching an airport on a heading of ' + hdgStr + '. ' +
+      'You see the ' + partStr + ' of the ' + indStr + ' pointed ' + pointsStr + '. ' +
+      'What runway can you expect to land on?';
+  }
+
   // ---- Render ----
 
   function render() {
     renderSVG();
     renderIndicators();
+    renderQuestion();
     renderButtons();
     renderStreakPips();
   }
