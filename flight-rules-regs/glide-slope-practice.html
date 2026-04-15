@@ -450,7 +450,7 @@
   <section class="page-hero">
     <p class="page-eyebrow">Interactive</p>
     <h1 class="page-title">Glide Slope Practice</h1>
-    <p class="page-desc">Read the approach lights and drag the pitch stick to get back on glidepath. Pull up when low, push down when high.</p>
+    <p class="page-desc">Read the approach lights and drag the pitch stick to get back on glidepath. Pull aft when low, push forward when high.</p>
   </section>
   <div class="divider"></div>
 
@@ -495,11 +495,11 @@
 
       <!-- Pitch stick -->
       <div class="stick-panel">
-        <div class="stick-dir">&#8593;<br>Pull<br>Up</div>
+        <div class="stick-dir">&#8593;<br>Push<br>Fwd</div>
         <div class="stick-track" id="stickTrack">
           <div class="stick-thumb" id="stickThumb"></div>
         </div>
-        <div class="stick-dir">Push<br>Down<br>&#8595;</div>
+        <div class="stick-dir">Pull<br>Aft<br>&#8595;</div>
       </div>
 
     </div>
@@ -593,15 +593,16 @@
   var THUMB_D  = 40;            // thumb diameter — matches CSS
   var USABLE_H = TRACK_H - THUMB_D;  // 180px of usable travel
 
-  // deviation (+2 … -2) → thumb top in px
+  // stickOffset (+2 … -2) → thumb top in px
+  // Inverted (stick-like): offset +2 (pull aft / nose up) = thumb at bottom, -2 (push fwd / nose dn) = top
   function devToTop(dev) {
-    return ((2 - dev) / 4) * USABLE_H;
+    return ((dev + 2) / 4) * USABLE_H;
   }
 
   // raw thumb top in px → nearest deviation step
   function topToDev(top) {
     var clamped = Math.max(0, Math.min(USABLE_H, top));
-    var raw     = 2 - (clamped / USABLE_H) * 4;
+    var raw     = (clamped / USABLE_H) * 4 - 2;
     return Math.round(Math.max(-2, Math.min(2, raw)));
   }
 
