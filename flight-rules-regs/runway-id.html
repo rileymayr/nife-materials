@@ -117,9 +117,9 @@
     }
 
     .page-desc {
-      font-size: 13px;
+      font-size: 16px;
       color: var(--text-dim);
-      max-width: 520px;
+      max-width: 800px;
       line-height: 1.6;
     }
 
@@ -178,7 +178,7 @@
     }
 
     .question-text {
-      font-size: 24px;
+      font-size: 20px;
       line-height: 1.8;
       color: var(--text);
     }
@@ -492,8 +492,8 @@
     }
     if (count === 3) {
       base = Math.floor(Math.random() * 180);
-      o1   = 50 + Math.floor(Math.random() * 20);
-      o2   = o1 + 50 + Math.floor(Math.random() * 20);
+      o1   = 30 + Math.floor(Math.random() * 50);
+      o2   = o1 + 30 + Math.floor(Math.random() * 50);
       return [base, (base + o1) % 180, (base + o2) % 180];
     }
     // 4 runways: 45° apart
@@ -589,7 +589,7 @@
       'dominant-baseline': 'middle',
       fill: '#e89a10',
       'font-family': "'Courier New', monospace",
-      'font-size': '26',
+      'font-size': '28',
       'font-weight': '700',
       'letter-spacing': '1'
     });
