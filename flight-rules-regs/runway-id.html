@@ -27,7 +27,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-family: Calibri, 'Trebuchet MS', sans-serif, 'Gill Sans', 'Gill Sans MT';
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -255,6 +255,7 @@
     .streak-row {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 16px;
       margin-top: 14px;
       padding-top: 12px;
@@ -299,6 +300,25 @@
     .streak-pip.lit {
       background: var(--color);
       box-shadow: 0 0 6px var(--color-glow);
+    }
+
+    .visual-toggle {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border: 1px solid var(--border-hi);
+      border-radius: 3px;
+      background: var(--surface);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: border-color 0.12s, color 0.12s;
+    }
+
+    .visual-toggle:hover {
+      border-color: var(--color);
+      color: var(--color);
     }
 
     /* ---- Indicator row ---- */
@@ -396,15 +416,18 @@
     <div class="btn-row" id="btnRow"></div>
 
     <div class="streak-row">
-      <span class="streak-label">Streak</span>
-      <span class="streak-count" id="streakCount">0</span>
-      <div class="streak-pips" id="streakPips">
-        <div class="streak-pip"></div>
-        <div class="streak-pip"></div>
-        <div class="streak-pip"></div>
-        <div class="streak-pip"></div>
-        <div class="streak-pip"></div>
+      <div>
+        <span class="streak-label">Streak</span>
+        <span class="streak-count" id="streakCount">0</span>
+        <div class="streak-pips" id="streakPips">
+          <div class="streak-pip"></div>
+          <div class="streak-pip"></div>
+          <div class="streak-pip"></div>
+          <div class="streak-pip"></div>
+          <div class="streak-pip"></div>
+        </div>
       </div>
+      <button class="visual-toggle" id="visualToggle">Hide Visual</button>
     </div>
   </div>
 </div>
@@ -756,6 +779,19 @@
     renderButtons();
     renderStreakPips();
   }
+
+  // ---- Visual Toggle ----
+
+  var visualsHidden = false;
+
+  document.getElementById('visualToggle').addEventListener('click', function() {
+    var svgPanel = document.querySelector('.svg-panel');
+    var btn = document.getElementById('visualToggle');
+
+    visualsHidden = !visualsHidden;
+    svgPanel.style.display = visualsHidden ? 'none' : 'block';
+    btn.textContent = visualsHidden ? 'Show Visual' : 'Hide Visual';
+  });
 
   // ---- Init ----
 
